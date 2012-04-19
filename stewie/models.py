@@ -45,7 +45,7 @@ def add_event(target, bucket, metrics, timestamp=None):
     pass
 
 def find_all_events():
-    ''' To slow... just used for testing '''
+    ''' Too slow... only used for tests '''
     []
 
 def remove_all_events():
