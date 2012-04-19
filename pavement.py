@@ -22,7 +22,7 @@ def start(options):
     server = Server(port=options.get('port', 8000))
 
     # from stewie.lib import daemon
-    # 
+    #
     # if options.start.get('daemon'):
     #     daemon.daemonize('/tmp/liveapi.pid')
 
@@ -33,18 +33,29 @@ def start(options):
 
 
 @task
-def test():
+@cmdopts([
+    ('keyword=', 'k', 'pass keyword to py.test'),
+    ('noserver', 'n', 'do not start the test server'),
+])
+def test(options):
     ''' Run all tests '''
     import pytest
     import stewie.config
     stewie.config.load_settings(os.environ.get('STEWIE_ENV', 'test'))
 
-    _start_test_server()
+    if not options.get('noserver'):
+        _start_test_server()
 
     args = ['-s', 'stewie/tests', 'fms_collector/tests']
+
+    keyword = options.get('keyword')
+    if keyword:
+        args.append('-k ' + keyword)
+
     ret = pytest.main(args)
 
-    _stop_test_server()
+    if not options.get('noserver'):
+        _stop_test_server()
 
     exit(ret)
 
@@ -56,4 +67,3 @@ def _start_test_server():
 def _stop_test_server():
     sh("ps ax | grep 'paver start -p7766' | grep -v grep | awk '{ print $1 }' | xargs kill")
     print "Server logs on tests/server.log"
-

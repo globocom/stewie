@@ -1,35 +1,30 @@
-
 from tornado.web import RequestHandler, HTTPError
 
 from stewie import models, detector
 
-class NewEventHandler(RequestHandler):
+class AddMetricsHandler(RequestHandler):
 
-    def post(self):
-        event = self.parse_event()
-        models.add_event(event['target'], event['bucket'], event['metrics'],
-                         event['timestamp'])
+    API_ERROR_CODES = 400,
 
-        self.update_calculus_base(event)
-        self.detect_anomaly(event)
+    def post(self, bucket, target, timestamp=None):
+        metrics = self.request.arguments
+        try:
+            models.add_event(bucket, target, metrics, timestamp)
+        except models.ValidationError as ex:
+            raise HTTPError(400, str(ex))
 
-    def update_calculus_base(self, event):
-        for metric in event['metrics']:
-            models.update_calculus_base(metric['metric'], metric['value'])
+    def write_error(self, status_code, **kwargs):
+        if status_code in self.API_ERROR_CODES and 'exc_info' in kwargs:
+            exc_info = kwargs.pop('exc_info')
+            self.write({'error_message': exc_info[1].log_message})
+            self.finish()
+        else:
+            super(AddMetricsHandler, self).write_error(status_code, **kwargs)
 
-    def detect_anomaly(self, event):
-        anomalies = detector.detect_anomaly(event)
-        for anomalies in anomalies:
-            models.save_anomaly(anomaly)
-
-    def parse_event(self):
-        # FAKED!!
+    def raise_invalid_request(self):
         raise HTTPError(400)
-        return {'target': 'foo',
-                'bucket': 'bar',
-                'metrics': [{'metric': 'cpu', 'value': 1.5}],
-                'timestamp': 123456789}
 
 api_urls = [
-    (r'/api/event', NewEventHandler),
+    (r'^/api/metrics/(.*)/(.*)/(.*)$', AddMetricsHandler),
+    (r'^/api/metrics/(.*)/(.*)$', AddMetricsHandler),
 ]
