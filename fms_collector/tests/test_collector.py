@@ -95,3 +95,5 @@ def test_should_get_stats_from_edge_and_post_to_stewie(monkeypatch):
     assert collector.STEWIE_SERVER + '/api/metrics/' + collector.BUCKET + '/edge'  == url
     data = post_args[0]['kwargs']['data']
     assert '4704' == data['total_threads']
+    for metric in collector.METRIC_KEYS:
+        assert metric in data

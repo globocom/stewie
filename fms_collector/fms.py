@@ -10,7 +10,7 @@ class FMS(object):
 
     def _call_api(self, method, **kwargs):
         url = "http://{server}:{port}/admin/{method}".format(
-            server=self.server, 
+            server=self.server,
             port=self.port,
             method=method)
         kwargs.setdefault('auser', self.username)

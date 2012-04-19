@@ -53,7 +53,7 @@ class XmlDictConfig(dict):
                     aDict.update(dict(element.items()))
                 self.update({element.tag: aDict})
             # this assumes that if you've got an attribute in a tag,
-            # you won't be having any text. This may or may not be a 
+            # you won't be having any text. This may or may not be a
             # good idea -- time will tell. It works for the way we are
             # currently doing XML configuration files...
             elif element.items():
