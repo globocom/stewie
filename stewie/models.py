@@ -52,6 +52,7 @@ def add_event(bucket, target, metrics, timestamp):
         'timestamp': validate_timestamp(timestamp)
         }
     db.events.save(event)
+    return event
 
 def find_all_events():
     return db.events.find()

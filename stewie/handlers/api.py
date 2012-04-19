@@ -7,9 +7,11 @@ class AddMetricsHandler(RequestHandler):
     API_ERROR_CODES = 400,
 
     def post(self, bucket, target, timestamp=None):
-        metrics = self.request.arguments
+        self.create_event(bucket, target, self.request.arguments, timestamp)
+
+    def create_event(self, *args, **kwargs):
         try:
-            models.add_event(bucket, target, metrics, timestamp)
+            return models.add_event(*args, **kwargs)
         except models.ValidationError as ex:
             raise HTTPError(400, str(ex))
 
@@ -20,9 +22,6 @@ class AddMetricsHandler(RequestHandler):
             self.finish()
         else:
             super(AddMetricsHandler, self).write_error(status_code, **kwargs)
-
-    def raise_invalid_request(self):
-        raise HTTPError(400)
 
 api_urls = [
     (r'^/api/metrics/(.*)/(.*)/(.*)$', AddMetricsHandler),
