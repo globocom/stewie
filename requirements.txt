@@ -5,4 +5,5 @@ chardet==1.0.1
 py==1.4.7
 pytest==2.2.3
 requests==0.11.1
+tornado==2.2
 wsgiref==0.1.2
