@@ -18,3 +18,6 @@ class Detector(object):
         exponent = -1 * math.pow(current_metric - average_of_metric, 2) / (2 * variance)
 
         return 1 / (math.sqrt(2*math.pi * variance)) * math.exp(exponent)
+
+    def get_metrics(self, event):
+        return [elem['metric'] for elem in event['metrics']]

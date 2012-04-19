@@ -5,6 +5,9 @@ Tests for the detector
 from stewie.tests import helpers
 from stewie.detector import Detector
 
+def setup_function(func):
+    detector = Detector()
+
 def test_detector_should_be_able_to_calculate_variance():
     '''
     variance = (sum(values^2) / n) - average^2
@@ -34,3 +37,9 @@ def test_detector_should_be_able_to_calculate_probability():
 
     assert round(0.01209853622595717 -
                 detector.calculate_probability(current_metric, avg_of_metric, variance), 5) == 0
+
+def test_detector_should_be_able_to_fetch_the_metrics_from_event():
+    event = helpers.get_fake_event()
+    detector = Detector()
+
+    assert ["cpu", "mem"] == detector.get_metrics(event)
