@@ -3,6 +3,7 @@ PySettings==0.1.90
 certifi==0.0.8
 chardet==1.0.1
 py==1.4.7
+pymongo==2.1.1
 pytest==2.2.3
 requests==0.11.1
 tornado==2.2
