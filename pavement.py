@@ -41,7 +41,7 @@ def test():
 
     _start_test_server()
 
-    args = ['-s', 'stewie/tests']
+    args = ['-s', 'stewie/tests', 'fms_collector/tests']
     ret = pytest.main(args)
 
     _stop_test_server()
