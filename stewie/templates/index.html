@@ -27,7 +27,7 @@
               {{ event.get('bucket', '') }} / {{ event.get('target', '') }}
             </a>
             {% for metric, value in event.get('metrics', {}).items() %}
-              {{ metric }}: <strong>{{ value }}</strong>
+              {{ metric }}: <strong>{{ value }} (σ: {{ "%0.1f" % detector.calculate_the_number_of_standard_deviations(event, metric) }})</strong>
             {% end %}
           </code>
         </pre>
