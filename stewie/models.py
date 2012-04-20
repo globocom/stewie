@@ -85,10 +85,6 @@ def remove_all_calculus_base():
     db.calculus_base.remove()
 
 
-def save_anomaly(anomaly):
-    pass
-
-
 # validators
 
 class ValidationError(Exception):
