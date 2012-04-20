@@ -6,11 +6,7 @@ Event document, collection `events`
 {
  'target'   : 'TARGET-ID',
  'bucket'   : 'BUCKET-ID',
- 'metrics'  : [ {'metric': 'cpu', 'value': 2.5 },
-                {'metric': 'mem', 'value': 400 },
-                .
-                .
-              ],
+ 'metrics'  : {'cpu', 2.5, 'mem': 400, ... },
  'timestamp': 8192819082,
 }
 
