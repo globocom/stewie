@@ -4,9 +4,13 @@ Tests for the detector
 
 from stewie.tests import helpers
 from stewie.detector import Detector
+from stewie import models
+import time
 
 def setup_function(func):
     detector = Detector()
+    models.remove_all_events()
+    models.remove_all_calculus_base()
 
 def test_detector_should_be_able_to_calculate_variance():
     '''
@@ -43,6 +47,7 @@ def test_detector_should_be_able_to_calculate_probability_with_zero_variance():
     assert 1 == detector.calculate_probability(1, 1, 0)
 
 def test_detector_should_be_able_to_calculate_probability_by_metric():
+    models.add_event('edge', 'edge_01', {u'cpu': u'2', u'mem': u'10'}, time.time())
     detector = Detector()
     event = helpers.get_fake_event()
     assert 1 == detector.calculate_probability_by_metric("cpu", event)
@@ -90,4 +95,15 @@ def test_detector_should_calculate_probability_for_each_metric(monkeypatch):
     detector.detect_anomaly(event)
 
     assert not list_of_keys
+
+def test_detector_should_fetch_calculus_base_of_bucket_and_key():
+    models.add_event('edge', 'edge_01', {u'cpu': u'2', u'mem': u'10'}, time.time())
+    models.add_event('edge', 'edge_02', {u'cpu': u'3', u'mem': u'20'}, time.time())
+
+    detector = Detector()
+
+    expected = (5, 2, 13)
+
+    assert expected == detector.fetch_data_from_calculus_base("edge", "cpu")
+
 

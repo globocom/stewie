@@ -1,4 +1,5 @@
 import math
+from stewie import models
 
 EPISILON = 1e-8
 
@@ -25,9 +26,12 @@ class Detector(object):
         probability = self.calculate_probability(current_value, average, variance)
         return probability
 
-    def fetch_data_from_calculus_base(self, bucket, key): #stub
-        calculus_base = {'total': 250, 'count': 100, 'squared_total': 625 }
-        return calculus_base['total'], calculus_base['count'], calculus_base['squared_total']
+    def fetch_data_from_calculus_base(self, bucket, key): #stu
+        calculus_base = models.get_calculus_base(bucket)
+        total = calculus_base[key]["total"]
+        count = calculus_base[key]["count"]
+        squared_total = calculus_base[key]["squared_total"]
+        return total, count, squared_total
 
     def calculate_variance(self, total, squared_total, count):
         '''

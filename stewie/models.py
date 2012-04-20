@@ -66,8 +66,6 @@ def update_calculus_base(bucket, metrics):
         inc_doc['counters.%s.total' % metric] = value
         inc_doc['counters.%s.squared_total' % metric] = value**2
 
-    # print "INC DOC"
-    # print inc_doc
     db.calculus_base.update({'bucket': bucket}, {'$inc': inc_doc}, upsert=True)
 
 def get_calculus_base(bucket):
