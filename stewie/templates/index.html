@@ -21,8 +21,8 @@
         <!-- <span class="time-elapsed">há 5 minutos</span> -->
         <pre>
           <code>
-            <a href="#">{{ event.get('bucket','') }} / {{ event.get('target') }}</a> CPU: <strong>89%</strong>
-            {% for metric,value in event.get('metrics', {}).items() %}
+            <a href="#">{{ event.get('bucket', '') }} / {{ event.get('target') }}</a>
+            {% for metric, value in event.get('metrics', {}).items() %}
               {{ metric }}: <strong>{{ value }}</strong>
             {% end %}
           </code>
