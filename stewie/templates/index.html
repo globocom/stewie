@@ -20,7 +20,7 @@
 
         {% from stewie.human import humanizeTimeDiff %}
         {% for event in events %}
-        <span class="time-elapsed">{{ humanizeTimeDiff(event['timestamp']) }} ago</span>
+        <span class="time-elapsed">{% if humanizeTimeDiff(event['timestamp']) %}{{ humanizeTimeDiff(event['timestamp']) }} ago {% else %} Just now {% end %}</span>
         <pre>
           <code>
             <a href="#">
