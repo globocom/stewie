@@ -1,7 +1,7 @@
 import math
 from stewie import models
 
-EPSILON = 1e-8
+EPSILON = 1e-10
 
 class Detector(object):
 
