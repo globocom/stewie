@@ -1,0 +1,94 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);
+html {
+  background: #6C7989;
+  background: #6c7989 -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6c7989), color-stop(100%, #434b55)) fixed;
+  background: #6c7989 -webkit-linear-gradient(#6c7989, #434b55) fixed;
+  background: #6c7989 -moz-linear-gradient(#6c7989, #434b55) fixed;
+  background: #6c7989 -o-linear-gradient(#6c7989, #434b55) fixed;
+  background: #6c7989 -ms-linear-gradient(#6c7989, #434b55) fixed;
+  background: #6c7989 linear-gradient(#6c7989, #434b55) fixed;
+}
+
+body {
+  padding: 50px 0;
+  margin: 0;
+  font: 14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #555;
+  font-weight: 300;
+}
+
+.wrapper {
+  width: 640px;
+  margin: 0 auto;
+  background: #DEDEDE;
+  -moz-box-shadow: rgba(0, 0, 0, 0.2) 0 0 0 1px, rgba(0, 0, 0, 0.45) 0 3px 10px;
+ }
+
+a {
+  color: #069;
+  text-decoration: none;
+}
+
+p {
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+strong {
+  color: #e00;
+  font-weight: 700;
+}
+
+header {
+  width: 640px;
+  background: #fafafa;
+}
+
+section {
+  padding: 15px 20px;
+  font-size: 15px;
+  border-top: 1px solid #fff;
+  background: -moz-linear-gradient(#fafafa, #dedede 700px);
+  position: relative;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #222;
+  padding: 0;
+  margin: 0 0 20px;
+  line-height: 1.2;
+}
+
+span.time-elapsed{
+  font-style: italic;
+  color: #3A3C42;
+}
+
+code, pre {
+  font-family: Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal;
+  color: #333;
+  font-size: 12px;
+}
+
+pre {
+  padding: 20px;
+  background: #46484f;
+  color: #f8f8f2;
+  margin: 0 -20px 20px;
+}
+pre code {
+  color: #f8f8f2;
+}
+
+div#badge {
+    background-image: url("stewie6.png");
+    background-repeat: no-repeat;
+    float: right;
+    height: 155px;
+    margin-right: -34px;
+    margin-top: -35px;
+    position: relative;
+    top: 10px;
+    width: 155px;
+    z-index: 999;
+}
