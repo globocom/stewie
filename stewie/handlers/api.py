@@ -21,10 +21,6 @@ class AddMetricsHandler(RequestHandler):
         except models.ValidationError as ex:
             raise HTTPError(400, str(ex))
 
-    def detect_anomaly(self, event):
-        detector = Detector()
-        return detector.detect_anomaly(event)
-
     def write_error(self, status_code, **kwargs):
         if status_code in self.API_ERROR_CODES and 'exc_info' in kwargs:
             exc_info = kwargs.pop('exc_info')
