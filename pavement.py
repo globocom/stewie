@@ -46,7 +46,7 @@ def test(options):
     if not options.get('noserver'):
         _start_test_server()
 
-    args = ['-s', 'stewie/tests', 'fms_collector/tests']
+    args = ['-vs', 'stewie/tests', 'fms_collector/tests']
 
     keyword = options.get('keyword')
     if keyword:
