@@ -81,7 +81,7 @@ pre code {
 }
 
 div#badge {
-    background-image: url("stewie6.png");
+    background-image: url("../img/stewie6.png");
     background-repeat: no-repeat;
     float: right;
     height: 155px;

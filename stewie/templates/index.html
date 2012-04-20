@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Stewie</title>
+
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+    <div class="wrapper">
+          <header>
+                <div id="badge"></div></header>
+      <section>
+
+        <h2>Stewie - anomaly detection</h2>
+
+        {% for event in events %}
+        <!-- <span class="time-elapsed">há 5 minutos</span> -->
+        <pre>
+          <code>
+            <a href="#">{{ event.get('bucket','') }} / {{ event.get('target') }}</a> CPU: <strong>89%</strong>
+            {% for metric,value in event.get('metrics', {}).items() %}
+              {{ metric }}: <strong>{{ value }}</strong>
+            {% end %}
+          </code>
+        </pre>
+        {% end %}
+
+
+  </body>
+</html>
