@@ -55,6 +55,7 @@ def test_detector_should_be_able_to_calculate_probability_by_metric():
 
 def test_detector_should_be_able_to_calculate_total_probability():
     detector = Detector()
+    models.add_event('edge', 'edge_01', {u'cpu': u'2', u'mem': u'10'}, time.time())
     event = helpers.get_fake_event()
     cpu_prob = detector.calculate_probability_by_metric("cpu", event)
     mem_prob = detector.calculate_probability_by_metric("mem", event)
@@ -69,7 +70,7 @@ def test_detector_should_be_able_to_fetch_the_metrics_from_event():
     event = helpers.get_fake_event()
     detector = Detector()
 
-    assert ["cpu", "mem"] == detector.get_metrics(event)
+    assert sorted(["cpu", "mem"]) == sorted(detector.get_metrics(event))
 
 def test_detector_should_be_able_to_get_current_value():
     detector = Detector()
