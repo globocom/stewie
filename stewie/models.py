@@ -55,7 +55,7 @@ def add_event(bucket, target, metrics, timestamp):
     return event
 
 def mark_event_as_anomalous(event):
-    db.events.update(event, {'is_anomalous': True})
+    db.events.update(event, {'$set' : {'is_anomalous': True}})
 
 def find_all_events():
     return db.events.find()
