@@ -1,7 +1,7 @@
 # coding: utf-8
 '''
 
-Event model
+Event document, collection `events`
 
 {
  'target'   : 'TARGET-ID',
@@ -18,15 +18,16 @@ Event model
 UTC timestamp should be used.
 
 
+Calculus base document.
+
 Data for calculus reference are stored on `calculus_base` collection, there is just
 one document with the format:
 
-{ 'metrics': [
-               {'metric1': {'total': xx, 'count': yy, 'squared_total': zz } },
-               {'metric2': {'total': aa, 'count': bb, 'squared_total': cc } },
-               .
-               .
-             ]
+{'bucket': 'bk1',
+ 'counters': {
+              'metric1': {'total': xx, 'count': yy, 'squared_total': zz },
+              'metric2': {'total': aa, 'count': bb, 'squared_total': cc },
+             }
 }
 
 `total` is the ∑ of all the metric values,
@@ -52,7 +53,7 @@ def add_event(bucket, target, metrics, timestamp):
         'timestamp': validate_timestamp(timestamp)
         }
     db.events.save(event)
-    return event
+    update_calculus_base(event['bucket'], event['metrics'])
 
 def find_all_events():
     return db.events.find()
@@ -60,11 +61,26 @@ def find_all_events():
 def remove_all_events():
     db.events.remove()
 
-def update_calculus_base(metric, value):
-    pass
 
-def get_calculus_base():
-    return {}
+def update_calculus_base(bucket, metrics):
+    inc_doc = {}
+
+    for metric, value in metrics.iteritems():
+        inc_doc['counters.%s.count' % metric] = 1
+        inc_doc['counters.%s.total' % metric] = value
+        inc_doc['counters.%s.squared_total' % metric] = value**2
+
+    # print "INC DOC"
+    # print inc_doc
+    db.calculus_base.update({'bucket': bucket}, {'$inc': inc_doc}, upsert=True)
+
+def get_calculus_base(bucket):
+    cb = db.calculus_base.find_one({'bucket': bucket})
+    return {} if not cb else cb.get('counters', {})
+
+def remove_all_calculus_base():
+    db.calculus_base.remove()
+
 
 def save_anomaly(anomaly):
     pass
@@ -93,11 +109,13 @@ def validate_metrics(metrics):
     plain_metrics = {}
 
     for metric, value in metrics.iteritems():
-        if len(value) > 1:
-            raise ValidationError("Found duplicate values for metric: '%s'" % metric)
+        if isinstance(value, (list, tuple)):
+            if len(value) > 1:
+                raise ValidationError("Found duplicate values for metric: '%s'" % metric)
+            value = value[0]
 
         try:
-            plain_metrics[metric] = float(value[0])
+            plain_metrics[metric] = float(value)
         except ValueError:
             raise ValidationError("Metric values should be numbers")
 

@@ -2,6 +2,6 @@
 ENV = 'dev'
 
 DB_HOST = 'localhost'
-DB_NAME = 'liveapi'
+DB_NAME = 'stewie'
 
 LOG_FILE = None                 # log to stderr
