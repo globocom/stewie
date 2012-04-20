@@ -1,6 +1,6 @@
+import json
 
 TEST_HOST = 'http://localhost:7766'
-import json
 
 def url_to_test(path):
     return TEST_HOST + path
@@ -9,8 +9,7 @@ def get_fake_event():
     return {
             'target'   : 'edge_01',
             'bucket'   : 'edge',
-            'metrics'  : [ {'metric': 'cpu', 'value': 2.5 },
-                            {'metric': 'mem', 'value': 40 },],
+            'metrics'  : {'cpu': 2.5, 'mem': 40},
             'timestamp': 8192819082,
             }
 

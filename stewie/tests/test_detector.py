@@ -4,9 +4,13 @@ Tests for the detector
 
 from stewie.tests import helpers
 from stewie.detector import Detector
+from stewie import models
+import time
 
 def setup_function(func):
     detector = Detector()
+    models.remove_all_events()
+    models.remove_all_calculus_base()
 
 def test_detector_should_be_able_to_calculate_variance():
     '''
@@ -43,16 +47,30 @@ def test_detector_should_be_able_to_calculate_probability_with_zero_variance():
     assert 1 == detector.calculate_probability(1, 1, 0)
 
 def test_detector_should_be_able_to_calculate_probability_by_metric():
+    models.add_event('edge', 'edge_01', {u'cpu': u'2', u'mem': u'10'}, time.time())
     detector = Detector()
     event = helpers.get_fake_event()
     assert 1 == detector.calculate_probability_by_metric("cpu", event)
     assert 1 == detector.calculate_probability_by_metric("mem", event)
 
+def test_detector_should_be_able_to_calculate_total_probability():
+    detector = Detector()
+    models.add_event('edge', 'edge_01', {u'cpu': u'2', u'mem': u'10'}, time.time())
+    event = helpers.get_fake_event()
+    cpu_prob = detector.calculate_probability_by_metric("cpu", event)
+    mem_prob = detector.calculate_probability_by_metric("mem", event)
+    assert cpu_prob * mem_prob == detector.calculate_total_probability(event)
+
+def test_detector_should_be_able_to_detect_anomaly():
+    detector = Detector()
+    event = helpers.get_fake_event()
+    assert False == detector.detect_anomaly(event)
+
 def test_detector_should_be_able_to_fetch_the_metrics_from_event():
     event = helpers.get_fake_event()
     detector = Detector()
 
-    assert ["cpu", "mem"] == detector.get_metrics(event)
+    assert sorted(["cpu", "mem"]) == sorted(detector.get_metrics(event))
 
 def test_detector_should_be_able_to_get_current_value():
     detector = Detector()
@@ -71,10 +89,22 @@ def test_detector_should_calculate_probability_for_each_metric(monkeypatch):
 
     def fake_calculate_probability_by_metric(key, event):
         list_of_keys.remove(key)
+        return 1
 
     detector = Detector()
     monkeypatch.setattr(detector, 'calculate_probability_by_metric', fake_calculate_probability_by_metric)
     detector.detect_anomaly(event)
 
     assert not list_of_keys
+
+def test_detector_should_fetch_calculus_base_of_bucket_and_key():
+    models.add_event('edge', 'edge_01', {u'cpu': u'2', u'mem': u'10'}, time.time())
+    models.add_event('edge', 'edge_02', {u'cpu': u'3', u'mem': u'20'}, time.time())
+
+    detector = Detector()
+
+    expected = (5, 2, 13)
+
+    assert expected == detector.fetch_data_from_calculus_base("edge", "cpu")
+
 

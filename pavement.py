@@ -21,10 +21,10 @@ def start(options):
     from stewie.server import Server
     server = Server(port=options.get('port', 8000))
 
-    # from stewie.lib import daemon
-    #
-    # if options.start.get('daemon'):
-    #     daemon.daemonize('/tmp/liveapi.pid')
+    from stewie.lib import daemon
+    
+    if options.start.get('daemon'):
+        daemon.daemonize('/tmp/stewie.pid')
 
     try:
         server.start()
@@ -46,7 +46,7 @@ def test(options):
     if not options.get('noserver'):
         _start_test_server()
 
-    args = ['-s', 'stewie/tests', 'fms_collector/tests']
+    args = ['-vs', 'stewie/tests', 'fms_collector/tests']
 
     keyword = options.get('keyword')
     if keyword:
