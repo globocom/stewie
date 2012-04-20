@@ -124,3 +124,16 @@ def test_detector_should_be_able_to_calculate_the_number_of_standard_deviations_
     assert 3 == detector.calculate_the_number_of_standard_deviations(event, "cpu")
     assert 3 == detector.calculate_the_number_of_standard_deviations(event, "mem")
 
+def test_detector_should_return_0_for_calculate_the_number_of_standard_deviations_of_metric_of_a_new_metric():
+    # adding this two events will generate a standard deviation of: cpu: 0.5, mem: 5
+    detector = Detector()
+
+    event = {
+            'target'   : 'edge_01',
+            'bucket'   : 'edge',
+            'metrics'  : {'cpu': 4.0, 'mem': 30},
+            'timestamp': 8192819082,
+            }
+
+    assert 0 == detector.calculate_the_number_of_standard_deviations(event, "cpu")
+    assert 0 == detector.calculate_the_number_of_standard_deviations(event, "mem")

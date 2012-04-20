@@ -32,6 +32,9 @@ class Detector(object):
     def calculate_the_number_of_standard_deviations(self, event, key):
         current_value, average, variance = self.get_current_value_average_and_variance(event, key)
 
+        if variance == 0:
+            return 0
+
         return (current_value - average) / math.sqrt(variance)
 
     def get_current_value_average_and_variance(self, event, key):
