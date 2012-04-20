@@ -107,4 +107,22 @@ def test_detector_should_fetch_calculus_base_of_bucket_and_key():
 
     assert expected == detector.fetch_data_from_calculus_base("edge", "cpu")
 
+def test_detector_should_be_able_to_calculate_the_number_of_standard_deviations_of_metric():
+    # adding this two events will generate a standard deviation of: cpu: 0.5, mem: 5
+    models.add_event('edge', 'edge_01', {u'cpu': u'2', u'mem': u'10'}, time.time())
+    models.add_event('edge', 'edge_02', {u'cpu': u'3', u'mem': u'20'}, time.time())
+
+    detector = Detector()
+
+    event = {
+            'target'   : 'edge_01',
+            'bucket'   : 'edge',
+            'metrics'  : {'cpu': 4.0, 'mem': 30},
+            'timestamp': 8192819082,
+            }
+
+
+    assert 3 == detector.calculate_the_number_of_standard_deviations(event, "cpu")
+    assert 3 == detector.calculate_the_number_of_standard_deviations(event, "mem")
+
 

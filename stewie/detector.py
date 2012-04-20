@@ -41,6 +41,22 @@ class Detector(object):
         squared_total = calculus_base[key]["squared_total"]
         return total, count, squared_total
 
+    def calculate_the_number_of_standard_deviations(self, event, key):
+        bucket = self.get_bucket(event)
+        try:
+            total, n, squared_total = self.fetch_data_from_calculus_base(bucket, key)
+        except KeyError:
+            '''
+            it's the first time that this metric was requested
+            '''
+            return 1
+
+        variance = self.calculate_variance(total, squared_total, n)
+        current_value = self.get_current_value(event, key)
+        average = self.calculate_average(total, n)
+
+        return (current_value - average) / math.sqrt(variance)
+
     def calculate_variance(self, total, squared_total, count):
         '''
         total: the sum of all values
