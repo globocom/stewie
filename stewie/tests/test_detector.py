@@ -48,12 +48,17 @@ def test_detector_should_be_able_to_calculate_probability_by_metric():
     assert 1 == detector.calculate_probability_by_metric("cpu", event)
     assert 1 == detector.calculate_probability_by_metric("mem", event)
 
-def test_detector_should_be_able_to_detect_anomaly():
+def test_detector_should_be_able_to_calculate_total_probability():
     detector = Detector()
     event = helpers.get_fake_event()
     cpu_prob = detector.calculate_probability_by_metric("cpu", event)
     mem_prob = detector.calculate_probability_by_metric("mem", event)
-    assert cpu_prob * mem_prob == detector.detect_anomaly(event)
+    assert cpu_prob * mem_prob == detector.calculate_total_probability(event)
+
+def test_detector_should_be_able_to_detect_anomaly():
+    detector = Detector()
+    event = helpers.get_fake_event()
+    assert False == detector.detect_anomaly(event)
 
 def test_detector_should_be_able_to_fetch_the_metrics_from_event():
     event = helpers.get_fake_event()

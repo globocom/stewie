@@ -1,8 +1,13 @@
 import math
 
+EPISILON = 1e-8
+
 class Detector(object):
 
     def detect_anomaly(self, event):
+        return self.calculate_total_probability(event) < EPISILON
+
+    def calculate_total_probability(self, event):
         metrics = self.get_metrics(event)
         probability = 1.0
         for key in metrics:
