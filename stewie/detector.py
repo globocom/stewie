@@ -16,21 +16,9 @@ class Detector(object):
         return probability
 
     def calculate_probability_by_metric(self, key, event):
-        bucket = self.get_bucket(event)
-
-        try:
-            total, n, squared_total = self.fetch_data_from_calculus_base(bucket, key)
-        except KeyError:
-            '''
-            it's the first time that this metric was requested
-            '''
-            return 1
-
-        variance = self.calculate_variance(total, squared_total, n)
-        current_value = self.get_current_value(event, key)
-        average = self.calculate_average(total, n)
-
+        current_value, average, variance = self.get_current_value_average_and_variance(event, key)
         probability = self.calculate_probability(current_value, average, variance)
+
         return probability
 
     def fetch_data_from_calculus_base(self, bucket, key):
@@ -42,6 +30,11 @@ class Detector(object):
         return total, count, squared_total
 
     def calculate_the_number_of_standard_deviations(self, event, key):
+        current_value, average, variance = self.get_current_value_average_and_variance(event, key)
+
+        return (current_value - average) / math.sqrt(variance)
+
+    def get_current_value_average_and_variance(self, event, key):
         bucket = self.get_bucket(event)
         try:
             total, n, squared_total = self.fetch_data_from_calculus_base(bucket, key)
@@ -49,13 +42,13 @@ class Detector(object):
             '''
             it's the first time that this metric was requested
             '''
-            return 1
+            return (0, 0, 0)
 
         variance = self.calculate_variance(total, squared_total, n)
         current_value = self.get_current_value(event, key)
         average = self.calculate_average(total, n)
 
-        return (current_value - average) / math.sqrt(variance)
+        return current_value, average, variance
 
     def calculate_variance(self, total, squared_total, count):
         '''

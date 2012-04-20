@@ -125,4 +125,3 @@ def test_detector_should_be_able_to_calculate_the_number_of_standard_deviations_
     assert 3 == detector.calculate_the_number_of_standard_deviations(event, "cpu")
     assert 3 == detector.calculate_the_number_of_standard_deviations(event, "mem")
 
-
