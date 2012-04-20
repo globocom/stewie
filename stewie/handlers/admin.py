@@ -6,7 +6,7 @@ from stewie.detector import Detector
 
 class AdminController(RequestHandler):
     def get(self):
-        self.render('index.html', events=models.find_anomalous_events(), detector=Detector())
+        self.render('index.html', compress_whitespace=True, events=models.find_anomalous_events(), detector=Detector())
 
 admin_urls = [
     (r'/', AdminController),
