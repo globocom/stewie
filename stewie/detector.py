@@ -52,5 +52,5 @@ class Detector(object):
             if elem['metric'] == key:
                 return elem['value']
 
-    def get_bucket(self, event): #need tests
+    def get_bucket(self, event):
         return event['bucket']

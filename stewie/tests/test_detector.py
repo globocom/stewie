@@ -60,6 +60,11 @@ def test_detector_should_be_able_to_get_current_value():
     assert 2.5 == detector.get_current_value(event, "cpu")
     assert 40 == detector.get_current_value(event, "mem")
 
+def test_detector_should_be_able_to_get_bucket():
+    detector = Detector()
+    event = helpers.get_fake_event()
+    assert 'edge' == detector.get_bucket(event)
+
 def test_detector_should_calculate_probability_for_each_metric(monkeypatch):
     event = helpers.get_fake_event()
     list_of_keys = ['cpu', 'mem']
