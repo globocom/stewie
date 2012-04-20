@@ -7,6 +7,7 @@ import json
 import requests
 
 from stewie import models
+from stewie.handlers.api import AddMetricsHandler
 from .helpers import url_to_test
 
 
@@ -66,6 +67,34 @@ def test_should_save_event_if_valid_request_with_timestamp():
     assert 200 == resp.status_code
     assert_event_created('bk1', 'mach1', {u'load': 1.2, u'mem': 530.0}, timestamp)
 
+
+# test using the handler directly to stub anomaly detector
+
+def ignore_init(klass):
+    stub_klass = type(klass.__name__ + 'Stub', (klass,), {'__init__': lambda self: None})
+    return stub_klass()
+
+class FakeRequest:
+    arguments = {'mem': ['10'], 'cpu': ['2.3']}
+
+class FakeDetector:
+    def __init__(self, anomalous):
+        self.anomalous = anomalous
+    def detect_anomaly(self, event):
+        return self.anomalous
+
+def test_handler_should_mark_event_as_anomalous_if_anomaly_detected():
+    handler = ignore_init(AddMetricsHandler)
+    handler.initialize()
+    handler.request = FakeRequest()
+    handler.detector = FakeDetector(True)
+
+    handler.post('bk1', 'mach1')
+
+    events = list(models.find_all_events())
+
+    assert 1 == len(events)
+    assert True == events[0]['is_anomalous']
 
 
 # custom asserts

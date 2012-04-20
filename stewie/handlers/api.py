@@ -1,19 +1,28 @@
 from tornado.web import RequestHandler, HTTPError
 
-from stewie import models, detector
+from stewie import models
+from stewie.detector import Detector
 
 class AddMetricsHandler(RequestHandler):
 
     API_ERROR_CODES = 400,
 
+    def initialize(self):
+        self.detector = Detector()
+
     def post(self, bucket, target, timestamp=None):
-        self.create_event(bucket, target, self.request.arguments, timestamp)
+        event = self.create_event(bucket, target, self.request.arguments, timestamp)
+        if self.detector.detect_anomaly(event):
+            models.mark_event_as_anomalous(event)
 
     def create_event(self, *args, **kwargs):
         try:
             return models.add_event(*args, **kwargs)
         except models.ValidationError as ex:
             raise HTTPError(400, str(ex))
+
+    def detect_anomaly(self, event):
+        detector = Detector()
 
     def write_error(self, status_code, **kwargs):
         if status_code in self.API_ERROR_CODES and 'exc_info' in kwargs:

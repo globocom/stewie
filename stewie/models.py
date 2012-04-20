@@ -8,6 +8,7 @@ Event document, collection `events`
  'bucket'   : 'BUCKET-ID',
  'metrics'  : {'cpu', 2.5, 'mem': 400, ... },
  'timestamp': 8192819082,
+ 'is_anomalous': False,
 }
 
 `timestamp` is optional, if not supplied the current timestamp is used. Always
@@ -46,10 +47,15 @@ def add_event(bucket, target, metrics, timestamp):
         'target': target,
         'bucket': bucket,
         'metrics': validate_metrics(metrics),
-        'timestamp': validate_timestamp(timestamp)
+        'timestamp': validate_timestamp(timestamp),
+        'is_anomalous': False,
         }
     db.events.save(event)
     update_calculus_base(event['bucket'], event['metrics'])
+    return event
+
+def mark_event_as_anomalous(event):
+    db.events.update(event, {'is_anomalous': True})
 
 def find_all_events():
     return db.events.find()
