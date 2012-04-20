@@ -18,8 +18,9 @@
         <h2>stewie</h2>
         <h1>system for anomaly detection in mass generic data</h1>
 
+        {% from stewie.human import humanizeTimeDiff %}
         {% for event in events %}
-        <!-- <span class="time-elapsed">há 5 minutos</span> -->
+        <span class="time-elapsed">{{ humanizeTimeDiff(event['timestamp']) }} ago</span>
         <pre>
           <code>
             <a href="#">
