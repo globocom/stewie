@@ -19,6 +19,6 @@ def test_admin_should_list_anomalous_events():
     assert 'mach20' in resp.content
     assert 'bk1' in resp.content
 
-def create_anomalous_event(*args):
-    event = models.add_event('bk1', 'mach1', {'mem': 100, 'load': 2.3}, time.time())
+def create_anomalous_event(bucket, target, metrics, timestamp):
+    event = models.add_event(bucket, target, metrics, timestamp)
     models.mark_event_as_anomalous(event)
