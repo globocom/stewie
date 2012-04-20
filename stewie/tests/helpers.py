@@ -1,6 +1,6 @@
+import json
 
 TEST_HOST = 'http://localhost:7766'
-import json
 
 def url_to_test(path):
     return TEST_HOST + path
