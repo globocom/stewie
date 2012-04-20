@@ -9,18 +9,19 @@ class Detector(object):
             self.calculate_probability_by_metric(key, event)
 
     def calculate_probability_by_metric(self, key, event):
-            bucket = self.get_bucket(event)
-            calculus_base = self.get_calculus_base(bucket, key)
+        bucket = self.get_bucket(event)
+        calculus_base = self.get_calculus_base(bucket, key)
 
-            total, n, squared_total = self.fetch_data_from_calculus_base(calculus_base)
+        total, n, squared_total = self.fetch_data_from_calculus_base(bucket, key)
 
-            variance = self.calculate_variance(total, squared_total, n)
-            current_value = self.get_current_value(event, key)
-            average = self.calculate_average(total, n)
+        variance = self.calculate_variance(total, squared_total, n)
+        current_value = self.get_current_value(event, key)
+        average = self.calculate_average(total, n)
 
-            probability = self.calculate_probability(current_value, average, variance)
+        probability = self.calculate_probability(current_value, average, variance)
 
-    def fetch_data_from_calculus_base(calculus_base):
+    def fetch_data_from_calculus_base(calculus_base): #stub
+        calculus_base = {'total': 250, 'count': 100, 'squared_total': 625 }
         return calculus_base['total'], calculus_base['count'], calculus_base['squared_total']
 
     def calculate_variance(self, total, squared_total, count):
@@ -46,9 +47,6 @@ class Detector(object):
 
     def get_metrics(self, event):
         return [elem['metric'] for elem in event['metrics']]
-
-    def get_calculus_base(self, bucket, metric): #stub
-        return {'total': 250, 'count': 100, 'squared_total': 625 }
 
     def get_current_value(self, event, key): #need tests
         for elem in event['metrics']:
