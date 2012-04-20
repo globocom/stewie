@@ -37,7 +37,7 @@ class Detector(object):
         return float(numerator)/float(denominator)
 
     def calculate_probability(self, current_value, average_of_metric, variance):
-        if variance == 0: #need tests
+        if variance == 0:
             return 1
 
         exponent = -1 * math.pow(current_value - average_of_metric, 2) / (2 * variance)
