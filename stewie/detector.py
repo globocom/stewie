@@ -4,9 +4,10 @@ class Detector(object):
 
     def detect_anomaly(self, event):
         metrics = self.get_metrics(event)
-
-        for key in metrics: #need tests
-            self.calculate_probability_by_metric(key, event)
+        probability = 1.0
+        for key in metrics:
+            probability *= self.calculate_probability_by_metric(key, event)
+        return probability
 
     def calculate_probability_by_metric(self, key, event):
         bucket = self.get_bucket(event)
@@ -40,9 +41,9 @@ class Detector(object):
         if variance == 0:
             return 1
 
-        exponent = -1 * math.pow(current_value - average_of_metric, 2) / (2 * variance)
+        exponent = -1.0 * math.pow(current_value - average_of_metric, 2) / (2 * variance)
 
-        return 1 / (math.sqrt(2*math.pi * variance)) * math.exp(exponent)
+        return 1.0 / (math.sqrt(2*math.pi * variance)) * math.exp(exponent)
 
     def get_metrics(self, event):
         return [elem['metric'] for elem in event['metrics']]
