@@ -15,5 +15,5 @@ def get_fake_event():
             }
 
 def get_fake_calculus_base(event_bucket):
-    return {'cpu': {'total': 250, 'count': 100, 'squared_total': 625 },
-            'mem': {'total': 4000, 'count': 100, 'squared_total': 160000 }}
+    return {'cpu': {'total': 300, 'count': 100, 'squared_total': 600 },
+            'mem': {'total': 5000, 'count': 100, 'squared_total': 150000 }}

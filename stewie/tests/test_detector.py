@@ -43,3 +43,17 @@ def test_detector_should_be_able_to_fetch_the_metrics_from_event():
     detector = Detector()
 
     assert ["cpu", "mem"] == detector.get_metrics(event)
+
+def test_detector_should_calculate_probability_for_each_metric(monkeypatch):
+    event = helpers.get_fake_event()
+    list_of_keys = ['cpu', 'mem']
+
+    def fake_calculate_probability_by_metric(key, event):
+        list_of_keys.remove(key)
+
+    detector = Detector()
+    monkeypatch.setattr(detector, 'calculate_probability_by_metric', fake_calculate_probability_by_metric)
+    detector.detect_anomaly(event)
+
+    assert not list_of_keys
+
