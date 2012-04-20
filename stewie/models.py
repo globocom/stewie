@@ -60,8 +60,10 @@ def mark_event_as_anomalous(event):
 def find_all_events():
     return db.events.find()
 
-def find_anomalous_events():
-    return db.events.find({'is_anomalous': True})
+def find_anomalous_events(limit=50):
+    return db.events.find({'is_anomalous': True},
+                          sort=[('timestamp', pymongo.DESCENDING)],
+                          limit=limit)
 
 def remove_all_events():
     db.events.remove()
