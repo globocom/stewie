@@ -47,7 +47,7 @@ class Detector(object):
     def get_metrics(self, event):
         return [elem['metric'] for elem in event['metrics']]
 
-    def get_current_value(self, event, key): #need tests
+    def get_current_value(self, event, key):
         for elem in event['metrics']:
             if elem['metric'] == key:
                 return elem['value']
