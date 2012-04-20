@@ -21,10 +21,10 @@ def start(options):
     from stewie.server import Server
     server = Server(port=options.get('port', 8000))
 
-    # from stewie.lib import daemon
-    #
-    # if options.start.get('daemon'):
-    #     daemon.daemonize('/tmp/liveapi.pid')
+    from stewie.lib import daemon
+    
+    if options.start.get('daemon'):
+        daemon.daemonize('/tmp/stewie.pid')
 
     try:
         server.start()
