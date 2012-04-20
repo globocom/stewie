@@ -10,8 +10,6 @@ class Detector(object):
 
     def calculate_probability_by_metric(self, key, event):
         bucket = self.get_bucket(event)
-        calculus_base = self.get_calculus_base(bucket, key)
-
         total, n, squared_total = self.fetch_data_from_calculus_base(bucket, key)
 
         variance = self.calculate_variance(total, squared_total, n)
@@ -19,8 +17,9 @@ class Detector(object):
         average = self.calculate_average(total, n)
 
         probability = self.calculate_probability(current_value, average, variance)
+        return probability
 
-    def fetch_data_from_calculus_base(calculus_base): #stub
+    def fetch_data_from_calculus_base(self, bucket, key): #stub
         calculus_base = {'total': 250, 'count': 100, 'squared_total': 625 }
         return calculus_base['total'], calculus_base['count'], calculus_base['squared_total']
 

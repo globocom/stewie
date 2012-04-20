@@ -38,6 +38,12 @@ def test_detector_should_be_able_to_calculate_probability():
     assert round(0.01209853622595717 -
                 detector.calculate_probability(current_metric, avg_of_metric, variance), 5) == 0
 
+def test_detecotr_should_be_able_to_calculate_probability_by_metric():
+    detector = Detector()
+    event = helpers.get_fake_event()
+    assert 1 == detector.calculate_probability_by_metric("cpu", event)
+    assert 1 == detector.calculate_probability_by_metric("mem", event)
+
 def test_detector_should_be_able_to_fetch_the_metrics_from_event():
     event = helpers.get_fake_event()
     detector = Detector()
