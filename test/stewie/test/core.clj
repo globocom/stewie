@@ -20,3 +20,9 @@
   (sliding-window-variance (repeat 20 1) 10) => 0.0
   (sliding-window-variance (range 1 20) 5) => 2.0
   (sliding-window-variance (range 1 20) 4) => 1.25)
+
+(fact "averager can count and sum"
+  (let [summer (averager)
+        result (last (repeatedly 10 #(summer 10)))]
+    (result :total) => 100
+    (result :count) => 10))

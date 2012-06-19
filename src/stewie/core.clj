@@ -1,5 +1,6 @@
 (ns stewie.core)
 
+; naive implementation
 (defn average
   "naive average implementation"
   [coll]
@@ -12,6 +13,7 @@
      (/ (reduce + (map #(Math/pow (- % avg) 2) coll))
       (count coll))))
 
+; naive sliding window
 (defn sliding-window-average
   "calculates the average of the first n elements of coll"
   [coll n]
@@ -21,3 +23,12 @@
   "calculates the variance of the first n elements of coll"
   [coll n]
   (variance (take n coll)))
+
+; O(1) calculator
+(defn averager []
+  (let [totals (atom {:total 0 :count 0})]
+    (fn [n]
+      (swap! totals
+        (comp
+          #(update-in % [:total] + n)
+          #(update-in % [:count] inc))))))
