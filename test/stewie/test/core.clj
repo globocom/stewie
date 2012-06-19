@@ -15,3 +15,8 @@
 (fact "sliding window average works"
   (sliding-window-average (repeat 10 1) 5) => 1
   (sliding-window-average (range 11) 5) => 2)
+
+(fact "sliding window variance works"
+  (sliding-window-variance (repeat 20 1) 10) => 0.0
+  (sliding-window-variance (range 1 20) 5) => 2.0
+  (sliding-window-variance (range 1 20) 4) => 1.25)
