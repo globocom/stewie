@@ -25,4 +25,5 @@
   (let [summer (averager)
         result (last (repeatedly 10 #(summer 10)))]
     (result :total) => 100
-    (result :count) => 10))
+    (result :count) => 10
+    (result :average) => 10))

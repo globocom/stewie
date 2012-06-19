@@ -31,4 +31,8 @@
       (swap! totals
         (comp
           #(update-in % [:total] + n)
-          #(update-in % [:count] inc))))))
+          #(update-in % [:count] inc)
+          #(assoc-in % [:average]
+            (let [c (get-in % [:count])]
+              (if (> c 0)
+                (/ (get-in % [:total]) c)))))))))
