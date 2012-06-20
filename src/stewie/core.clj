@@ -7,7 +7,7 @@
   (/ (reduce + coll) (count coll)))
 
 (defn variance
-  "naive variance deviation implementation"
+  "naive variance implementation"
   [coll]
   (let [avg (average coll)]
      (/ (reduce + (map #(Math/pow (- % avg) 2) coll))
@@ -33,6 +33,6 @@
           #(update-in % [:total] + n)
           #(update-in % [:count] inc)
           #(assoc-in % [:average]
-            (let [c (get-in % [:count])]
-              (if (> c 0)
-                (/ (get-in % [:total]) c)))))))))
+            (let [cnt (% :count) sum (% :total)]
+              (if (> cnt 0)
+                (/ sum cnt)))))))))
