@@ -21,9 +21,7 @@
   (sliding-window-variance (range 1 20) 5) => 2.0
   (sliding-window-variance (range 1 20) 4) => 1.25)
 
-(fact "averager can count and sum"
+(fact "averager can calculate average"
   (let [summer (averager)
-        result (last (repeatedly 10 #(summer 10)))]
-    (result :total) => 100
-    (result :count) => 10
-    (result :average) => 10))
+        result (last (for [x (range 11)] (summer x)))]
+    (result :average) => 5))

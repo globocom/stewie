@@ -28,11 +28,8 @@
 (defn averager []
   (let [totals (atom {:total 0 :count 0})]
     (fn [n]
-      (swap! totals
-        (comp
-          #(update-in % [:total] + n)
-          #(update-in % [:count] inc)
-          #(assoc-in % [:average]
-            (let [cnt (% :count) sum (% :total)]
-              (if (> cnt 0)
-                (/ sum cnt)))))))))
+      (let [result (swap! totals
+            (comp
+              #(update-in % [:total] + n)
+              #(update-in % [:count] inc)))]
+            {:average (/ (result :total) (result :count))}))))
