@@ -28,6 +28,13 @@
         {:average avg
          :variance (- (/ (result :sq_total) cnt) (Math/pow avg 2))}))))
 
+; See http://en.wikipedia.org/wiki/Probability_density_function
+(defn density [x average variance]
+  "Calculates probability density function"
+  (let [sigma (Math/sqrt variance)
+        divisor (* sigma (Math/sqrt (* 2 Math/PI)))
+        exponent (/ (Math/pow (- x average) 2) (* 2 variance))]
+    (/ (Math/exp (- 0 exponent)) divisor)))
 
 ; Reference implementations
 (defn average

@@ -27,3 +27,10 @@
         result (last (for [x input] (acc x)))]
     (result :average) => (average input)
     (result :variance) => (variance input)))
+
+(fact "density implementation is correct"
+  (density 0 0 1) => (/ 1 (Math/sqrt (* 2 Math/PI)))
+  (density 1 0 1) => (* (Math/exp -1/2) (density 0 0 1))
+  (density 2 0 1) => (* (Math/exp -2) (density 0 0 1))
+  (density -1 0 1) => (density 1 0 1)
+  (density 6 5 1) => (density 1 0 1))
