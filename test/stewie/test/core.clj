@@ -34,3 +34,9 @@
   (density 2 0 1) => (* (Math/exp -2) (density 0 0 1))
   (density -1 0 1) => (density 1 0 1)
   (density 6 5 1) => (density 1 0 1))
+
+(fact "detector returns propability of one variable"
+  (let [det (detector)
+        input (range 11)
+        result (last (for [x input] (det x)))]
+    result => (density (last input) (average input) (variance input))))

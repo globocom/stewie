@@ -36,6 +36,13 @@
         exponent (/ (Math/pow (- x average) 2) (* 2 variance))]
     (/ (Math/exp (- 0 exponent)) divisor)))
 
+(defn detector []
+  "Given an stream input of points, returns the probability density for the last input point"
+  (let [acc (accumulator)]
+    (fn [x]
+      (let [state (acc x)]
+        (density x (state :average) (state :variance))))))
+
 ; Reference implementations
 (defn average
   "naive average implementation"
