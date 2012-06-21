@@ -36,12 +36,22 @@
         exponent (/ (Math/pow (- x average) 2) (* 2 variance))]
     (/ (Math/exp (- 0 exponent)) divisor)))
 
-(defn detector []
-  "Given an stream input of points, returns the probability density for the last input point"
+(defn single-variable-detector []
+  "Given an stream input of values, returns the probability density for the last input"
   (let [acc (accumulator)]
     (fn [x]
       (let [state (acc x)]
         (density x (state :average) (state :variance))))))
+
+(defn detector []
+  "Given an stream input of points as maps, returns the probability density for the last point"
+  (let [detectors (atom {})]
+    (fn [x]
+      (let [create-detector (fn [k] ((swap! detectors #(assoc-in % [k] (single-variable-detector))) k))
+            get-detector (fn [k] (if (contains? @detectors k) (@detectors k) (create-detector k)))
+            get-density (fn [kv] (let [[k v] kv] ((get-detector k) v)))
+            densities (map get-density x)]
+        (reduce * densities)))))
 
 ; Reference implementations
 (defn average

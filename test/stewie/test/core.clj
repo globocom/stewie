@@ -35,8 +35,20 @@
   (density -1 0 1) => (density 1 0 1)
   (density 6 5 1) => (density 1 0 1))
 
-(fact "detector returns propability of one variable"
-  (let [det (detector)
+(fact "single-variable-detector returns value propability"
+  (let [det (single-variable-detector)
         input (range 11)
         result (last (for [x input] (det x)))]
     result => (density (last input) (average input) (variance input))))
+
+(fact "detector returns propability of one variable"
+  (let [det (detector)
+        input (range 11)
+        result (last (for [x input] (det {:x x})))]
+    result => (density (last input) (average input) (variance input))))
+
+(fact "detector returns propability of two variables"
+  (let [det (detector)
+        input (range 11)
+        result (last (for [x input] (det {:x x :y x})))]
+    result => (Math/pow (density 10 5 10) 2)))
