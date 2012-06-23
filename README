@@ -1,10 +1,27 @@
-# stewie
+# Stewie
 
-FIXME: Stewie anomaly detection in Clojure
+Stewie is an unsupervised anomaly detector written in Clojure.
+
+Given a multivariate unlabeled input stream, Stewie detects anomalies using
+statistical analysis of the input data, assuming that anomalies are rare and
+that all metrics are uncorrelated and normal distributed.
+
+The detector returns the probability density of each new point in constant time
+and with constant memory requirement.
 
 ## Usage
 
-FIXME: write
+In the REPL, use stewie.core namespace, and feed it with maps:
+
+    => (ns test (use [stewie.core]))
+    => (def det (detector))
+    #'test/det
+    => (det {:x 40 :y 20})
+    NaN
+    => (det {:x 40 :y 20.4})
+    0.027916815612332915
+
+The return value means that the probability density at `{:x 40 :y 20.4}` is `2.79%`.
 
 ## License
 
