@@ -1,6 +1,6 @@
 (ns stewie.test.core
   (:use [stewie.core])
-  (:use midje.sweet))
+  (:use [midje.sweet]))
 
 (fact "average reference implementation is correct"
   (average (repeat 10 1)) => 1
