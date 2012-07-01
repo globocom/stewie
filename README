@@ -23,6 +23,12 @@ In the REPL, use stewie.core namespace, and feed it with maps:
 
 The return value means that the probability density at `{:x 40 :y 20.4}` is `2.79%`.
 
+## Test
+
+We use midje for testing. Simply run
+
+	$ lein midje
+
 ## License
 
 Copyright (C) 2012 Juarez Bochi
