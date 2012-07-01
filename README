@@ -23,6 +23,21 @@ In the REPL, use stewie.core namespace, and feed it with maps:
 
 The return value means that the probability density at `{:x 40 :y 20.4}` is `2.79%`.
 
+## Web Application
+
+We can also run the detector as a web application
+
+    $ lein run
+
+To use, just post the data to the root URL.
+
+    $ curl localhost:8080/ --data "x=3&y=5"
+    {"density":"NaN","y":5,"x":3}
+    $ curl localhost:8080/ --data "x=7&y=20"
+    {"density":0.0039033221016212777,"y":20,"x":7}
+    $ curl localhost:8080/ --data "x=3.0&y=3.14"
+    {"density":0.006188085315908742,"y":3.14,"x":3.0}
+
 ## Test
 
 We use midje for testing. Simply run
