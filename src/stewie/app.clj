@@ -7,7 +7,7 @@
 (def detect (detector))
 
 (defpage "/" []
-  "Welcome to Stewie!")
+  "Welcome to Stewie!\n")
 
 (defn convert-to-numbers
   "convert hash-map values to numbers"
