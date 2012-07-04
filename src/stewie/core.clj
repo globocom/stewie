@@ -1,6 +1,6 @@
 (ns stewie.core)
 
-(defn accumulator []
+(defn accumulator
   "Generages an accumulator that will return average and variance in O(1)
 
   It keeps an internal state of:
@@ -17,6 +17,7 @@
   }
 
   "
+  []
   (let [totals (atom {:total 0, :count 0, :sq_total 0})]
     (fn [n]
       (let [update_totals (comp #(update-in % [:count] inc)
@@ -29,22 +30,25 @@
          :variance (- (/ (result :sq_total) cnt) (Math/pow avg 2))}))))
 
 ; See http://en.wikipedia.org/wiki/Probability_density_function
-(defn density [x average variance]
+(defn density
   "Calculates probability density function"
+  [x average variance]
   (let [sigma (Math/sqrt variance)
         divisor (* sigma (Math/sqrt (* 2 Math/PI)))
         exponent (/ (Math/pow (- x average) 2) (* 2 variance))]
     (/ (Math/exp (- 0 exponent)) divisor)))
 
-(defn single-variable-detector []
+(defn single-variable-detector
   "Given an stream input of values, returns the probability density for the last input"
+  []
   (let [acc (accumulator)]
     (fn [x]
       (let [state (acc x)]
         (density x (state :average) (state :variance))))))
 
-(defn detector []
+(defn detector
   "Given an stream input of points as maps, returns the probability density for the last point"
+  []
   (let [detectors (atom {})]
     (fn [x]
       (let [create-detector (fn [k] ((swap! detectors #(assoc-in % [k] (single-variable-detector))) k))
