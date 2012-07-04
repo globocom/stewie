@@ -22,7 +22,6 @@ Install the dependencies:
     $ cd stewie-clojure
     $ lein deps
 
-
 ## Usage
 
 In the REPL, use stewie.core namespace, and feed it with maps:
@@ -60,6 +59,14 @@ We use midje for testing. Simply run
 
 	$ lein midje
 
+
+## Deploy to Heroku
+
+    $ heroku create --stack cedar
+    $ git push heroku master
+    $ heroku scale web=1
+    $ curl http://stewie.herokuapp.com
+    Welcome to Stewie!
 
 ## License
 
