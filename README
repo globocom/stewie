@@ -9,6 +9,20 @@ that all metrics are uncorrelated and normal distributed.
 The detector returns the probability density of each new point in constant time
 and with constant memory requirement.
 
+## Installation
+
+First, install leiningen (https://github.com/technomancy/leiningen/)
+
+Git clone the project:
+
+    $ git clone https://github.com/jbochi/stewie-clojure
+
+Install the dependencies:
+
+    $ cd stewie-clojure
+    $ lein deps
+
+
 ## Usage
 
 In the REPL, use stewie.core namespace, and feed it with maps:
@@ -22,6 +36,7 @@ In the REPL, use stewie.core namespace, and feed it with maps:
     0.027916815612332915
 
 The return value means that the probability density at `{:x 40 :y 20.4}` is `2.79%`.
+
 
 ## Web Application
 
@@ -38,11 +53,13 @@ To use, just post the data to the root URL.
     $ curl localhost:8080/ --data "x=3.0&y=3.14"
     {"density":0.006188085315908742,"y":3.14,"x":3.0}
 
+
 ## Test
 
 We use midje for testing. Simply run
 
 	$ lein midje
+
 
 ## License
 
