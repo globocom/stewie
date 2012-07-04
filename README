@@ -26,15 +26,16 @@ Install the dependencies:
 
 In the REPL, use stewie.core namespace, and feed it with maps:
 
-    => (ns test (use [stewie.core]))
+    => (use 'stewie.core)
+    nil
     => (def det (detector))
-    #'test/det
+    #'stewie.app/det
     => (det {:x 40 :y 20})
     NaN
-    => (det {:x 40 :y 20.4})
-    0.027916815612332915
+    => (det {:x 30 :y 20.4})
+    0.05854983152431939
 
-The return value means that the probability density at `{:x 40 :y 20.4}` is `2.79%`.
+The return value means that the probability density at `{:x 30 :y 20.4}` is `5.85%`.
 
 
 ## Web Application
@@ -57,7 +58,7 @@ To use, just post the data to the root URL.
 
 We use midje for testing. Simply run
 
-	$ lein midje
+    $ lein midje
 
 
 ## Deploy to Heroku
