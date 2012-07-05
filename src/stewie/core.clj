@@ -36,7 +36,7 @@
   (let [sigma (Math/sqrt variance)
         divisor (* sigma (Math/sqrt (* 2 Math/PI)))
         exponent (/ (Math/pow (- x average) 2) (* 2 variance))]
-    (/ (Math/exp (- 0 exponent)) divisor)))
+    (/ (Math/exp (- exponent)) divisor)))
 
 (defn single-variable-detector
   "Given an stream input of values, returns the probability density for the last input"

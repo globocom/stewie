@@ -2,7 +2,7 @@
   (:use stewie.core)
   (:use noir.core)
   (:require [noir.server :as server]
-      [noir.response :as response]))
+            [noir.response :as response]))
 
 (def detect (detector))
 
