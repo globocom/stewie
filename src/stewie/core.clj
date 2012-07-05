@@ -46,25 +46,32 @@
       (let [state (acc x)]
         (density x (state :average) (state :variance))))))
 
+(defn atom-hash-map
+  "Returns a function that receives a key and returns a value for that key.
+
+  If the key is new, uses the default-creator to generate a new value"
+  [default-creator]
+  (let [a (atom {})]
+    (fn [x]
+      (let [add-key (fn [k] (swap! a #(assoc-in % [k] (default-creator))))
+            get-key (fn [k] (if (contains? @a k) (@a k) ((add-key k) k)))]
+        (get-key x)))))
+
 (defn detector
   "Given an stream input of points as maps, returns the probability density for the last point"
   []
-  (let [detectors (atom {})]
+  (let [detectors (atom-hash-map single-variable-detector)]
     (fn [x]
-      (let [create-var-detector (fn [k] ((swap! detectors #(assoc-in % [k] (single-variable-detector))) k))
-            get-var-detector (fn [k] (if (contains? @detectors k) (@detectors k) (create-var-detector k)))
-            get-var-density (fn [kv] (let [[k v] kv] ((get-var-detector k) v)))
+      (let [get-var-density (fn [kv] (let [[k v] kv] ((detectors k) v)))
             densities (map get-var-density x)]
         (reduce * densities)))))
 
 (defn bucket-detector
   "Returns a function that will create one detector per key (bucket)"
   []
-  (let [detectors (atom {})]
+  (let [detectors (atom-hash-map detector)]
     (fn [bucket x]
-      (let [create-detector (fn [bucket] ((swap! detectors #(assoc-in % [bucket] (detector))) bucket))
-            get-detector (fn [bucket] (if (contains? @detectors bucket) (@detectors bucket) (create-detector bucket)))
-            det (get-detector bucket)]
+      (let [det (detectors bucket)]
         (det x)))))
 
 ; Reference implementations
