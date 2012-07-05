@@ -66,6 +66,7 @@ We use midje for testing. Simply run
     $ heroku create --stack cedar
     $ git push heroku master
     $ heroku scale web=1
+    $ heroku addons:add mongohq:free
     $ curl http://stewie.herokuapp.com
     Welcome to Stewie!
 

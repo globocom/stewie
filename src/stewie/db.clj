@@ -20,14 +20,3 @@
       (authenticate (:user config) (:pass config)) ;; Setup u/p.
       (or (collection-exists? collection) ;; Create collection named 'firstcollection' if it doesn't exist.
           (create-collection! collection)))))
-
-; (defpage "/welcome" []
-;   (maybe-init)
-;   (let [counter 
-;   (fetch-and-modify 
-;    :firstcollection ;; In the collection named 'firstcollection',
-;    {:_id "counter"} ;; find the counter record.
-;    {:$inc {:value 1} } ;; Increment it.
-;    :return-new true :upsert? true)] ;; Insert if not there.
-;     (common/layout
-;      [:p (str "Welcome to noir-heroku, you're visitor " (or (:value counter) 0))])))
