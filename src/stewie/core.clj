@@ -51,11 +51,21 @@
   []
   (let [detectors (atom {})]
     (fn [x]
-      (let [create-detector (fn [k] ((swap! detectors #(assoc-in % [k] (single-variable-detector))) k))
-            get-detector (fn [k] (if (contains? @detectors k) (@detectors k) (create-detector k)))
-            get-density (fn [kv] (let [[k v] kv] ((get-detector k) v)))
-            densities (map get-density x)]
+      (let [create-var-detector (fn [k] ((swap! detectors #(assoc-in % [k] (single-variable-detector))) k))
+            get-var-detector (fn [k] (if (contains? @detectors k) (@detectors k) (create-var-detector k)))
+            get-var-density (fn [kv] (let [[k v] kv] ((get-var-detector k) v)))
+            densities (map get-var-density x)]
         (reduce * densities)))))
+
+(defn bucket-detector
+  "Returns a function that will create one detector per key (bucket)"
+  []
+  (let [detectors (atom {})]
+    (fn [bucket x]
+      (let [create-detector (fn [bucket] ((swap! detectors #(assoc-in % [bucket] (detector))) bucket))
+            get-detector (fn [bucket] (if (contains? @detectors bucket) (@detectors bucket) (create-detector bucket)))
+            det (get-detector bucket)]
+        (det x)))))
 
 ; Reference implementations
 (defn average

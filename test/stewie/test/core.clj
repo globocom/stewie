@@ -51,4 +51,13 @@
   (let [det (detector)
         input (range 11)
         result (last (for [x input] (det {:x x :y x})))]
-    result => (Math/pow (density 10 5 10) 2)))
+    result => (Math/pow (density (last input) (average input) (variance input)) 2)))
+
+(fact "bucket-detector supports several detectors"
+  (let [det (bucket-detector)
+        first-input (range 11)
+        first-result (last (for [x first-input] (det :first {:x x :y x})))
+        second-input (range 50)
+        second-result (last (for [x second-input] (det :second {:cpu x})))]
+    first-result => (Math/pow (density (last first-input) (average first-input) (variance first-input)) 2)
+    second-result => (density (last second-input) (average second-input) (variance second-input))))
