@@ -4,7 +4,7 @@
   (:require [noir.server :as server]
             [noir.response :as response]))
 
-(def detect (detector))
+(def detect (bucket-detector))
 
 (defpage "/" []
   "Welcome to Stewie!\n")
@@ -14,9 +14,11 @@
   [h]
   (into {} (map (fn [[k v]] [k (read-string v)]) h)))
 
-(defpage [:post "/"] {:as data}
-  (let [data (convert-to-numbers data)
-        data (assoc data :density (detect data))]
+(defpage [:post "/:bucket"] {bucket :bucket :as data}
+  (let [data (dissoc data :bucket)
+        data (convert-to-numbers data)
+        density (detect bucket data)
+        data (assoc data :density density)]
     (response/json data)))
 
 (defn -main [& m]
