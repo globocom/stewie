@@ -22,3 +22,8 @@
       (authenticate (:user config) (:pass config)) ;; Setup u/p.
       (or (collection-exists? collection) ;; Create collection named 'firstcollection' if it doesn't exist.
           (create-collection! collection)))))
+
+(defn save-data
+  "Posts information to mongo"
+  [collection bucket data]
+    (insert! collection {:bucket bucket :data data}))
