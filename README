@@ -72,6 +72,6 @@ We use midje for testing. Simply run
 
 ## License
 
-Copyright (C) 2012 Juarez Bochi
+Copyright (C) 2012 Globo.com
 
 Distributed under the Eclipse Public License, the same as Clojure.
