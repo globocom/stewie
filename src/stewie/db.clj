@@ -26,4 +26,5 @@
 (defn save-data
   "Posts information to mongo"
   [collection bucket data]
+    (maybe-init :stewie)
     (insert! collection {:bucket bucket :data data}))

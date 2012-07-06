@@ -1,9 +1,11 @@
 (ns stewie.test.app
   (:use [stewie.app])
+  (:use [stewie.db])
   (:use [stewie.core])
   (:use [midje.sweet])
   (:require [cheshire.core :as json])
-  (:require [noir.util.test :as noir]))
+  (:require [noir.util.test :as noir])
+  (:require [somnium.congomongo :as mongo]))
 
 (fact "homepage returns status 200"
   (-> (noir/send-request "/") :status) => 200)
@@ -21,3 +23,10 @@
           response (last (for [x input] (post-to-bucket x)))
           json-response (json/parse-string (response :body))]
       (json-response "density") => (density (last input) (average input) (variance input)))))
+
+(fact "post to bucket persists data on mongo"
+  (let [initiated (maybe-init :stewie)
+        destroyed (seq (for [id (mongo/fetch :stewie :where {:bucket :temp})] (mongo/destroy! :stewie id)))
+        response (noir/send-request [:post "/temp"] {"x" "1"})
+        fetch-count (mongo/fetch-count :stewie :where {:bucket :temp})]
+    fetch-count => 1))

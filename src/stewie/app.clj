@@ -20,16 +20,9 @@
   (let [data (dissoc data :bucket)
         data (convert-to-numbers data)
         density (detect bucket data)
-        data (assoc data :density density)]
+        data (assoc data :density density)
+        id (save-data :stewie bucket data)]
     (response/json data)))
-
-(defpage "/test-db" []
-  (maybe-init :stewie)
-  (let [counter (fetch-and-modify :stewie
-                                  {:_id "counter"}
-                                  {:$inc {:value 1} }
-                                  :return-new true :upsert? true)]
-    (str "Welcome to stewie, you're visitor " (or (:value counter) 0))))
 
 (defn -main [& m]
   (let [mode (keyword (or (first m) :dev))
