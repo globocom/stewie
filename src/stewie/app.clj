@@ -20,7 +20,7 @@
   (let [data (dissoc data :bucket)
         data (convert-to-numbers data)
         density (detect bucket data)
-        data (assoc data :density density)
+        data {:data data :density density}
         id (save-data :stewie bucket data)]
     (response/json data)))
 
