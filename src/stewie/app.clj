@@ -1,5 +1,6 @@
 (ns stewie.app
   (use stewie.core
+       stewie.crypto
        stewie.db
        noir.core
        somnium.congomongo)
@@ -15,6 +16,10 @@
   "convert hash-map values to numbers"
   [h]
   (into {} (map (fn [[k v]] [k (read-string v)]) h)))
+
+(defpage "/:bucket" {bucket :bucket}
+  (let [new-token (token bucket)]
+    (response/json {:token new-token})))
 
 (defpage [:post "/:bucket"] {bucket :bucket :as data}
   (let [data (dissoc data :bucket)

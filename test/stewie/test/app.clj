@@ -1,8 +1,9 @@
 (ns stewie.test.app
-  (:use [stewie.app])
-  (:use [stewie.db])
-  (:use [stewie.core])
-  (:use [midje.sweet])
+  (:use stewie.app
+        stewie.core
+        stewie.crypto
+        stewie.db
+        midje.sweet)
   (:require [cheshire.core :as json])
   (:require [noir.util.test :as noir])
   (:require [somnium.congomongo :as mongo]))
@@ -30,3 +31,9 @@
         response (noir/send-request [:post "/temp"] {"x" "1"})
         fetch-count (mongo/fetch-count :stewie :where {:bucket :temp})]
     fetch-count => 1))
+
+(fact "get to bucket returns token"
+  (let [response (noir/send-request "/token")]
+    (response :status) => 200
+    ((response :headers) "Content-Type") => "application/json"
+    ((json/parse-string (response :body)) "token") => (token "token")))
