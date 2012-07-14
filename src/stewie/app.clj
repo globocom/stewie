@@ -28,14 +28,19 @@
       (response/json {:token new-token}))))
 
 (defpage [:post "/:bucket"] {bucket :bucket :as data}
-  (let [data (dissoc data :bucket)
-        data (convert-to-numbers data)
-        density (detect bucket data)
-        data {:data data :density density}
-        id (save-data collection bucket data)]
-    (response/json data)))
+  (if (= (str (data :token)) (token bucket))
+    (let [data (dissoc data :bucket :token)
+          data (convert-to-numbers data)
+          density (detect bucket data)
+          result {:data data :density density}
+          id (save-data collection bucket result)]
+      (response/json result))
+    (assoc
+      (response/json {:error "invalid token"})
+      :status 403)))
 
 (defn -main [& m]
   (let [mode (keyword (or (first m) :dev))
         port (Integer. (get (System/getenv) "PORT" "8080"))]
+    (maybe-init collection)
     (server/start port {:mode mode :ns 'stewie})))

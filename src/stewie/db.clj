@@ -5,7 +5,7 @@
 ;MongoDB setup functions taken from http://thecomputersarewinning.com/post/clojure-heroku-noir-mongo/
 
 (defn split-mongo-url
-  "Parses mongodb url from heroku, eg. mongodb://user:pass@localhost:1234/stewie"
+  "Parses mongodb url from heroku, eg. mongodb://user:pass@localhost:1234/db"
   [url]
   (let [matcher (re-matcher #"^.*://(.*?):(.*?)@(.*?):(\d+)/(.*)$" url)] ;; Setup the regex.
     (when (.find matcher) ;; Check if it matches.
@@ -15,7 +15,7 @@
   "Checks if connection and collection exist, otherwise initialize."
   [collection]
   (when (not (connection? *mongo-config*)) ;; If global connection doesn't exist yet.
-    (let [mongo-url (get (System/getenv) "MONGOHQ_URL" "mongodb://:@localhost:27017/db") ;; Heroku puts it here.
+    (let [mongo-url (get (System/getenv) "MONGOHQ_URL" "mongodb://:@localhost:27017/stewie") ;; Heroku puts it here.
           config    (split-mongo-url mongo-url)] ;; Extract options.
       (println "Initializing mongo @ " mongo-url)
       (mongo! :db (:db config) :host (:host config) :port (Integer. (:port config))) ;; Setup global mongo.

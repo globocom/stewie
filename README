@@ -35,7 +35,7 @@ In the REPL, use stewie.core namespace, and feed it with maps:
     => (det {:x 30 :y 20.4})
     0.05854983152431939
 
-The return value means that the probability density at `{:x 30 :y 20.4}` is `5.85%`.
+The return value means that the probability density at `{:x 30 :y 20.4}` is `0.0585`.
 
 
 ## Web Application
@@ -46,12 +46,14 @@ We can also run the detector as a web application
 
 To use, just post the data to the root URL.
 
-    $ curl localhost:8080/bucket --data "x=3&y=5"
-    {"density":"NaN","y":5,"x":3}
-    $ curl localhost:8080/bucket --data "x=7&y=20"
-    {"density":0.0039033221016212777,"y":20,"x":7}
-    $ curl localhost:8080/bucket --data "x=3.0&y=3.14"
-    {"density":0.006188085315908742,"y":3.14,"x":3.0}
+    $ curl localhost:8080/bucket
+    {"token":"6adf44ffd853f8131d41b20572265aa12c4227e6"}
+    $ curl localhost:8080/bucket --data "x=3&y=5&token=6adf44ffd853f8131d41b20572265aa12c4227e6"
+    {"data":{"y":5,"x":3},"density":"NaN"}
+    $ curl localhost:8080/bucket --data "x=7&y=20&token=6adf44ffd853f8131d41b20572265aa12c4227e6"
+    {"data":{"y":20,"x":7},"density":0.0039033221016212777}
+    $ curl localhost:8080/bucket --data "x=3.0&y=3.14&token=6adf44ffd853f8131d41b20572265aa12c4227e6"
+    {"data":{"y":3.14,"x":3.0},"density":0.006188085315908742}
 
 
 ## Test
