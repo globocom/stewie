@@ -8,6 +8,7 @@
             [noir.response :as response]))
 
 (def detect (bucket-detector))
+(def collection :buckets)
 
 (defpage "/" []
   "Welcome to Stewie!\n")
@@ -18,15 +19,20 @@
   (into {} (map (fn [[k v]] [k (read-string v)]) h)))
 
 (defpage "/:bucket" {bucket :bucket}
-  (let [new-token (token bucket)]
-    (response/json {:token new-token})))
+  (let [taken (has-data collection bucket)
+        new-token (token bucket)]
+    (if taken
+      (assoc
+        (response/json {:error "token already taken"})
+        :status 410)
+      (response/json {:token new-token}))))
 
 (defpage [:post "/:bucket"] {bucket :bucket :as data}
   (let [data (dissoc data :bucket)
         data (convert-to-numbers data)
         density (detect bucket data)
         data {:data data :density density}
-        id (save-data :stewie bucket data)]
+        id (save-data collection bucket data)]
     (response/json data)))
 
 (defn -main [& m]

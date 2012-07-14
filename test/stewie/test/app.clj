@@ -3,10 +3,11 @@
         stewie.core
         stewie.crypto
         stewie.db
+        stewie.test.db
         midje.sweet)
-  (:require [cheshire.core :as json])
-  (:require [noir.util.test :as noir])
-  (:require [somnium.congomongo :as mongo]))
+  (:require [cheshire.core :as json]
+            [noir.util.test :as noir]
+            [somnium.congomongo :as mongo]))
 
 (fact "homepage returns status 200"
   (-> (noir/send-request "/") :status) => 200)
@@ -26,14 +27,25 @@
       (json-response "density") => (density (last input) (average input) (variance input)))))
 
 (fact "post to bucket persists data on mongo"
-  (let [initiated (maybe-init :stewie)
-        destroyed (seq (for [id (mongo/fetch :stewie :where {:bucket :temp})] (mongo/destroy! :stewie id)))
+  (let [initiated (maybe-init collection)
+        cleaned (clean-bucket! collection :temp)
         response (noir/send-request [:post "/temp"] {"x" "1"})
-        fetch-count (mongo/fetch-count :stewie :where {:bucket :temp})]
+        fetch-count (mongo/fetch-count collection :where {:bucket :temp})]
     fetch-count => 1))
 
 (fact "get to bucket returns token"
-  (let [response (noir/send-request "/token")]
+  (let [initiated (maybe-init collection)
+        cleaned (clean-bucket! collection :token)
+        response (noir/send-request "/token")]
     (response :status) => 200
     ((response :headers) "Content-Type") => "application/json"
     ((json/parse-string (response :body)) "token") => (token "token")))
+
+(fact "get to bucket does not return token if it is already taken"
+  (let [initiated (maybe-init collection)
+        cleaned (clean-bucket! collection :token)
+        response (noir/send-request [:post "/token"] {"x" "1"})
+        response (noir/send-request "/token")]
+    (response :status) => 410
+    ((response :headers) "Content-Type") => "application/json"
+    ((json/parse-string (response :body)) "error") => "token already taken"))

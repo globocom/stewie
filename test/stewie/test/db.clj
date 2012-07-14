@@ -3,6 +3,10 @@
         somnium.congomongo
         midje.sweet))
 
+(defn clean-bucket! [collection bucket]
+  (seq (for [id (fetch collection :where {:bucket bucket})]
+    (destroy! collection id))))
+
 (fact "mongo connection works"
   (let [db (maybe-init :test)]
     (insert! :test {:foo "bar"})
@@ -18,3 +22,16 @@
     (return-value :data) => data
     (return-value :density) => density
     ((fetch-one :test :where {:_id (return-value :_id)}) :bucket) => "any"))
+
+(fact "has-data returns false for new bucket"
+  (let [db (maybe-init :test)
+        bucket :unused
+        cleaned (clean-bucket! :test bucket)]
+    (has-data :test bucket) => false))
+
+(fact "has-data returns true for used bucket"
+  (let [db (maybe-init :test)
+        bucket :used
+        cleaned (clean-bucket! :test bucket)
+        saved (save-data :test bucket {})]
+    (has-data :test bucket) => true))

@@ -1,11 +1,11 @@
 (ns stewie.db
-  (:use somnium.congomongo)
-  (:use [somnium.congomongo.config :only [*mongo-config*]]))
+  (:use somnium.congomongo
+        [somnium.congomongo.config :only [*mongo-config*]]))
 
 ;MongoDB setup functions taken from http://thecomputersarewinning.com/post/clojure-heroku-noir-mongo/
 
 (defn split-mongo-url
-  "Parses mongodb url from heroku, eg. mongodb://user:pass@localhost:1234/db"
+  "Parses mongodb url from heroku, eg. mongodb://user:pass@localhost:1234/stewie"
   [url]
   (let [matcher (re-matcher #"^.*://(.*?):(.*?)@(.*?):(\d+)/(.*)$" url)] ;; Setup the regex.
     (when (.find matcher) ;; Check if it matches.
@@ -26,5 +26,9 @@
 (defn save-data
   "Posts information to mongo"
   [collection bucket data]
-    (maybe-init :stewie)
     (insert! collection (assoc data :bucket bucket)))
+
+(defn has-data
+  "Checks if there is data for bucket in mongo"
+  [collection bucket]
+    (> (fetch-count collection :where {:bucket bucket}) 0))
