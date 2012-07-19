@@ -15,7 +15,7 @@ First, install leiningen (https://github.com/technomancy/leiningen/)
 
 Git clone the project:
 
-    $ git clone https://github.com/jbochi/stewie-clojure
+    $ git clone https://github.com/globocom/stewie
 
 Install the dependencies:
 
